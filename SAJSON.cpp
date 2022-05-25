@@ -125,6 +125,7 @@ namespace SuperAnim{
 
 		// std::string theSuperAnimFile include the absolute path
 		SuperAnimMainDef *Load_GetSuperAnimMainDef(const std::string &theSuperAnimFile);
+        SuperAnimMainDef *Load_GetSuperAnimMainDefEffect(const std::string &theSuperAnimFile);
 		void UnloadSuperAnimMainDef(const std::string &theName);
 	};
 
@@ -168,14 +169,20 @@ unsigned char* GetFileData(const char* pszFileName, const char* pszMode, unsigne
 
 
 int main(int argc, char* argv[]){
-    if(argc != 2){
+    if(argc < 2){
         printf("usage: SAJSON sam_path\n");
         return 1;
     }
     
     
-    
-    SuperAnim::SuperAnimMainDef* p = SuperAnim::SuperAnimDefMgr::GetInstance()->Load_GetSuperAnimMainDef(argv[1]);
+    SuperAnim::SuperAnimMainDef* p;
+    if (argc == 2) {
+        p = SuperAnim::SuperAnimDefMgr::GetInstance()->Load_GetSuperAnimMainDef(argv[1]);
+    } else {
+        // ex: SAJON sam_path -effect
+        // will run as long as there are more than 2 arguments
+        p = SuperAnim::SuperAnimDefMgr::GetInstance()->Load_GetSuperAnimMainDefEffect(argv[1]);
+    }
     
     printf("{");
     
