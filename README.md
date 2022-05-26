@@ -80,5 +80,6 @@ Battle Effects and UI Animations use a slightly different format and require the
 ## Credits
 - [Raymondlu](https://github.com/raymondlu) for creating Super Animation and the parser implementation
 - [Natural Style Co. Ltd.](https://na-s.jp/SuperAnimHTML5/) for base JSON converter
+- [BluuArc](https://github.com/BluuArc) for figuring out how to parse battle effects and ui animations
 
 
