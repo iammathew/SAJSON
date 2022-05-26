@@ -23,6 +23,10 @@ Run the just built binary like this:
 
 **Example:** `SAJSON animation.sam > animation.json`
 
+If the following error message, pops up: `Assertion failed: aNumFrames > 0 && "We don't have valid frames.", file SuperAnimCore.cpp, line 642`
+
+Try using the `--effect` flag like this: `SAJSON animation.sam --effect > animation.json`
+
 **Tip:** I personally use `.sajson` as an extension for generated json files in order to distinguish them more easily.
 
 ## Super Animation Explained
@@ -71,7 +75,7 @@ The most important bits though are:
 This format is used by some of Alim Gumi games like Brave Frontier.
 This project was built in order to reproduce some of the animations in the game.
 
-Note: Battle Effects and UI Animations don't work with this converter. I suspect Alim made some changes to Super Animation for those kind of effects.
+Battle Effects and UI Animations use a slightly different format and require the `--effect` flag to be passed in, in order to be parsed correctly.
 
 ## Credits
 - [Raymondlu](https://github.com/raymondlu) for creating Super Animation and the parser implementation

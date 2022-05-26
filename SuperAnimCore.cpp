@@ -213,13 +213,13 @@ namespace SuperAnim {
 		~SuperAnimDefMgr();
 		
 		// std::string theSuperAnimFile include the absolute path
-		bool LoadSuperAnimMainDef(const std::string &theSuperAnimFile);
+		bool LoadSuperAnimMainDef(const std::string &theSuperAnimFile, bool effectFile = false);
 	public:
 		static SuperAnimDefMgr *GetInstance();
 		static void DestroyInstance();
 
 		// std::string theSuperAnimFile include the absolute path
-		SuperAnimMainDef *Load_GetSuperAnimMainDef(const std::string &theSuperAnimFile);
+		SuperAnimMainDef *Load_GetSuperAnimMainDef(const std::string &theSuperAnimFile, bool effectFile = false);
 		void UnloadSuperAnimMainDef(const std::string &theName);
 	};
 	
@@ -560,7 +560,7 @@ namespace SuperAnim {
 		//		return true;
 		return a.mStartFrameNum < b.mStartFrameNum;
 	}
-	bool SuperAnimDefMgr::LoadSuperAnimMainDef(const std::string &theSuperAnimFile)
+	bool SuperAnimDefMgr::LoadSuperAnimMainDef(const std::string &theSuperAnimFile, bool effectFile)
 	{
 		std::string aFullPath = theSuperAnimFile;
 		
@@ -598,10 +598,17 @@ namespace SuperAnim {
 		
 		SuperAnimMainDef &aMainDef = mMainDefCache[theSuperAnimFile]; 
 		aMainDef.mAnimRate = aBuffer.ReadByte();
-		aMainDef.mX = aBuffer.ReadLong() / TWIPS_PER_PIXEL;
-		aMainDef.mY = aBuffer.ReadLong() / TWIPS_PER_PIXEL;
-		aMainDef.mWidth = aBuffer.ReadLong() / TWIPS_PER_PIXEL;
-		aMainDef.mHeight = aBuffer.ReadLong() / TWIPS_PER_PIXEL;
+		if (effectFile) {
+			aMainDef.mX = aBuffer.ReadShort() / TWIPS_PER_PIXEL;
+			aMainDef.mY = aBuffer.ReadShort() / TWIPS_PER_PIXEL;
+			aMainDef.mWidth = aBuffer.ReadShort() / TWIPS_PER_PIXEL;
+			aMainDef.mHeight = aBuffer.ReadShort() / TWIPS_PER_PIXEL;
+		} else {
+			aMainDef.mX = aBuffer.ReadLong() / TWIPS_PER_PIXEL;
+			aMainDef.mY = aBuffer.ReadLong() / TWIPS_PER_PIXEL;
+			aMainDef.mWidth = aBuffer.ReadLong() / TWIPS_PER_PIXEL;
+			aMainDef.mHeight = aBuffer.ReadLong() / TWIPS_PER_PIXEL;
+		}
 		
 		SuperAnimLabelArray aSuperAnimLabelArray;
 		
@@ -768,7 +775,7 @@ namespace SuperAnim {
 		return true;
 	}
 	
-	SuperAnimMainDef *SuperAnimDefMgr::Load_GetSuperAnimMainDef(const std::string &theSuperAnimFile)
+	SuperAnimMainDef *SuperAnimDefMgr::Load_GetSuperAnimMainDef(const std::string &theSuperAnimFile, bool effectFile)
 	{
 		SuperAnimMainDefMap::iterator anItr = mMainDefCache.find(theSuperAnimFile);
 		if (anItr != mMainDefCache.end())
@@ -776,10 +783,10 @@ namespace SuperAnim {
 			return &anItr->second;
 		}
 		
-		if (LoadSuperAnimMainDef(theSuperAnimFile) == false)
+		if (LoadSuperAnimMainDef(theSuperAnimFile, effectFile) == false)
 			return NULL;
 		
-		return Load_GetSuperAnimMainDef(theSuperAnimFile);
+		return Load_GetSuperAnimMainDef(theSuperAnimFile, effectFile);
 	}
 	
 	void SuperAnimDefMgr::UnloadSuperAnimMainDef(const std::string &theName)

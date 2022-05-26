@@ -118,13 +118,13 @@ namespace SuperAnim{
 		~SuperAnimDefMgr();
 		
 		// std::string theSuperAnimFile include the absolute path
-		bool LoadSuperAnimMainDef(const std::string &theSuperAnimFile);
+		bool LoadSuperAnimMainDef(const std::string &theSuperAnimFile, bool effectFile = false);
 	public:
 		static SuperAnimDefMgr *GetInstance();
 		static void DestroyInstance();
 
 		// std::string theSuperAnimFile include the absolute path
-		SuperAnimMainDef *Load_GetSuperAnimMainDef(const std::string &theSuperAnimFile);
+		SuperAnimMainDef *Load_GetSuperAnimMainDef(const std::string &theSuperAnimFile, bool effectFile = false);
 		void UnloadSuperAnimMainDef(const std::string &theName);
 	};
 
@@ -168,14 +168,14 @@ unsigned char* GetFileData(const char* pszFileName, const char* pszMode, unsigne
 
 
 int main(int argc, char* argv[]){
-    if(argc != 2){
-        printf("usage: SAJSON sam_path\n");
+    if (argc != 2 && argc != 3) {
+        printf("usage: SAJSON sam_path [--effect]\n");
         return 1;
     }
-    
-    
-    
-    SuperAnim::SuperAnimMainDef* p = SuperAnim::SuperAnimDefMgr::GetInstance()->Load_GetSuperAnimMainDef(argv[1]);
+
+    bool effect = (argc == 3 && std::string(argv[2]) == "--effect");
+
+    SuperAnim::SuperAnimMainDef* p = SuperAnim::SuperAnimDefMgr::GetInstance()->Load_GetSuperAnimMainDef(argv[1], effect);
     
     printf("{");
     
