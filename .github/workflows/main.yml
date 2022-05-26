@@ -1,0 +1,42 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+  workflow_dispatch:
+
+jobs:
+  build-linux:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Build binary
+        run: bash build.osx.sh
+      - uses: actions/upload-artifact@v3
+        with:
+          name: SAJSON-linux
+          path: SAJSON
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Build binary
+        shell: cmd
+        run: .\build.win.bat
+      - uses: actions/upload-artifact@v3
+        with:
+          name: SAJSON-windows.exe
+          path: SAJSON.exe
+  build-macos:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Build binary
+        run: bash build.osx.sh
+      - uses: actions/upload-artifact@v3
+        with:
+          name: SAJSON-macos
+          path: SAJSON
